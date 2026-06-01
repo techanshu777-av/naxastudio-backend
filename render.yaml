@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: naxastudio-backend
+    env: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_URL
+        value: https://naxastudio-backend.onrender.com
+      - key: API_BASE_URL
+        value: https://naxastudio-backend.onrender.com
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: nexastudio
+      - key: ADMIN_API_KEY
+        sync: false
