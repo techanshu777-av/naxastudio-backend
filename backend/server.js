@@ -24,7 +24,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     success: true,
     service: 'NexaStudio Contact API',
-    database: 'mongodb',
+    database: app.locals.db ? 'connected' : 'disconnected',
     timestamp: new Date().toISOString(),
   });
 });
@@ -73,14 +73,15 @@ app.use((err, req, res, next) => {
 async function startServer() {
   try {
     app.locals.db = await connectDatabase();
-    app.listen(port, () => {
-      console.log(`NaxaStudio backend running on port ${port}`);
-      console.log('API: Node.js + Express + MongoDB');
-    });
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
+    app.locals.db = null;
   }
+
+  app.listen(port, () => {
+    console.log(`NaxaStudio backend running on port ${port}`);
+    console.log('API: Node.js + Express + MongoDB');
+  });
 }
 
 process.on('SIGINT', async () => {
