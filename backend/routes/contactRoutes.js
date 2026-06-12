@@ -12,6 +12,13 @@ function isEmail(email) {
 }
 
 router.post('/', asyncHandler(async (req, res) => {
+  if (!req.app.locals.db) {
+    return res.status(503).json({
+      success: false,
+      message: 'Database is not connected. Please try again in a moment.',
+    });
+  }
+
   const contact = buildContactDocument(req.body, req);
 
   if (!contact.name || !contact.email || !contact.phone || !contact.service || !contact.message) {
